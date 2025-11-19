@@ -28,7 +28,7 @@ def command_parser():
     enc = subparsers.add_parser("encrypt", help="Encrypt a File or Directory/Folder")
     enc.add_argument("input",help="Path to File or Directory to Encrypt")
     enc.add_argument("output",help="Output file (or directory to output to is using the --scramble-name flag)")
-    enc.add_argument("--base64",action="store_true",help="Encode the output using Base64 (this will take up more space")
+    enc.add_argument("--base64",action="store_true",help="Encode the output using Base64 (this will take up more space)")
     enc.add_argument("--scramble-name",action="store_true",help="Scrambles the original filename to a random nonsense")
 
     # Decrypt Parse
@@ -37,7 +37,7 @@ def command_parser():
     dec.add_argument("input",help="Path to File or Directory to Decrypt")
     dec.add_argument("output",help="Output file path or directory")
     dec.add_argument("--base64",action="store_true",help="Use if the input file or directory is Base64 encoded")
-    dec.add_argument("--restore_name",action="store_true",help="Restore the original file name if it was scrambled using the --scramble-name flag.")
+    dec.add_argument("--restore-name",action="store_true",help="Restore the original file name if it was scrambled using the --scramble-name flag.")
 
     return parser
 
@@ -85,7 +85,7 @@ def main():
                 input_path=args.input,
                 output_path=args.output,
                 password=password,
-                base64_output=args.base64,
+                base64_input=args.base64,
                 restore_name=args.restore_name,
             )
             print(f"[+] Decryption Complete.\n -> {args.output}")
