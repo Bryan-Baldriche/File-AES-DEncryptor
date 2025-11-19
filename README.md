@@ -41,7 +41,6 @@ When you encrypt a file:
 3. Your password is transformed into a secure 256-bit AES key using PBKDF2-HMAC-SHA256.  
 4. The file is encrypted using **AES-256-GCM**, protecting both its contents and authenticity.  
 5. The final encrypted file is structured as:
-6. 
 [salt | nonce | encrypted data]
 
 These cryptographic pieces are safe to store because they do not reveal anything about the original file.
