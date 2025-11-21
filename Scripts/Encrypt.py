@@ -24,10 +24,10 @@ def derive_key(password: str, salt: bytes) -> bytes:
   password_bytes = password.encode("utf-8")
 
   kdf = PBKDF2HMAC(
-    algorithm=hshes.SHA256(),
-    length=KEY_LENGTH,
-    salt=salt,
-    iterations=PBKDF2_ITERATIONS,
+    algorithm = hashes.SHA256(),
+    length = KEY_LENGTH,
+    salt = salt,
+    iterations = PBKDF2_ITERATIONS,
   )
 
   key = kdf.derive(password_bytes)
@@ -35,27 +35,26 @@ def derive_key(password: str, salt: bytes) -> bytes:
 
 ### Detect file/directory and zip if directory
 
-def user_input_file(input_path: str) -> tuple[pathlib.Path, pathlib.Path | None]:
+def prepare_input_file(input_path: str) -> tuple[pathlib.Path, pathlib.Path | None]:
+    path_to_file = pathlib.Path(input_path)
 
-  path_to_file = pathlib.Path(input_path)
+    if path_to_file.is_file():
+        return path_to_file, None
+    if not path_to_file.is_dir():
+        raise ValueError(f"Input path is neither a file nor directory: {input_path}")
 
-  if path_to_file.is_file():
-    return path_to_file, None
-  if not path_to_file.is_dir():
-    raise ValueError(f"Input path is neither a file nor directory: {input_path}")
+    # make temp directory for zip
+    temp_dir = pathlib.Path(tempfile.mkdtemp(prefix=ZIP_TEMP_PREFIX))
+    zip_path = temp_dir / (path_to_file.name +".zip")
 
-  temp_dir - pathlib.Path(tempfile.mkdtemp(prefix=ZIP_TEMP_PREFIX))
+    # non-compressed zip for file integrity
 
-  zip_path = temp_dir / (path_to_file.name +".zip")
+    with zipfile.ZipFile(zip_path, "w", compression=zipfile.ZIP_STORED) as z:
+        for file_path in path_to_file.rglob("*"):
+            if file_path.is_file():
+                z.write(
+                    file_path,
+                    file_path.relative_to(path_to_file)
+                )
 
-  # none-compressed zip for file integrity
-
-  with zipfile.ZipFile(zip_path, "w", compression=zipfile.ZIP_STORED) as z:
-    for file_path in path_to_file.rglob("*"):
-      if file_path.if_file():
-        z.write(
-          file_path,
-          file_path.relative_to(path_to_file)
-        )
-
-  return zip_path, temp_dir
+    return zip_path, temp_dir
