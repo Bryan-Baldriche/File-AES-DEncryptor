@@ -47,7 +47,7 @@ def prepare_input_file(input_path: str) -> tuple[pathlib.Path, pathlib.Path | No
     temp_dir = pathlib.Path(tempfile.mkdtemp(prefix=ZIP_TEMP_PREFIX))
     zip_path = temp_dir / (path_to_file.name +".zip")
 
-    # non-compressed zip for file integrity
+    # to make a non-compressed zip for file integrity
 
     with zipfile.ZipFile(zip_path, "w", compression=zipfile.ZIP_STORED) as z:
         for file_path in path_to_file.rglob("*"):
