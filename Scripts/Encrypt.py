@@ -21,14 +21,14 @@ ZIP_TEMP_PREFIX = "ENC_TEMP_"
 ### derive 256-bit key
 
 def derive_key(password: str, salt: bytes) -> bytes:
-  password_bytes = password.encode("utf-8")
+    password_bytes = password.encode("utf-8")
 
-  kdf = PBKDF2HMAC(
-    algorithm = hashes.SHA256(),
-    length = KEY_LENGTH,
-    salt = salt,
-    iterations = PBKDF2_ITERATIONS,
-  )
+    kdf = PBKDF2HMAC(
+        algorithm = hashes.SHA256(),
+        length = KEY_LENGTH,
+        salt = salt,
+        iterations = PBKDF2_ITERATIONS,
+    )
 
   key = kdf.derive(password_bytes)
   return key
