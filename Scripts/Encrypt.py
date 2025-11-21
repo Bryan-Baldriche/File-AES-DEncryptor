@@ -44,7 +44,7 @@ def user_input_file(input_path: str) -> tuple[pathlib.Path, pathlib.Path | None]
   if not path_to_file.is_dir():
     raise ValueError(f"Input path is neither a file nor directory: {input_path}")
 
-  temp_dir - pathlib.Path)tempfile.mkdtemp(prefix=ZIP_TEMP_PREFIX))
+  temp_dir - pathlib.Path(tempfile.mkdtemp(prefix=ZIP_TEMP_PREFIX))
 
   zip_path = temp_dir / (path_to_file.name +".zip")
 
