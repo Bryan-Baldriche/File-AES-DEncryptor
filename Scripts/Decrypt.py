@@ -2,6 +2,7 @@ import base64
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 
 from Encrypt import derive_key, SALT_LENGTH, NONCE_LENGTH
+from Encrypt import HEADER_MAGIC
 
 ### Load the encrypted file data
 
@@ -25,4 +26,29 @@ def get_salt_nonce_ciphertext(data: bytes):
     ciphertext = data[SALT_LENGTH + NONCE_LENGTH:]
     
     return salt, nonce, ciphertext
+
+### AES Decrypt
+
+def aes_decrypt(ciphertext: bytes, password: str, salt: bytes, nonce: bytes) -> bytes:
+    key = derive_key(password, salt)
+    aesgcm = AESGCM(key)
+    plaintext = aesgcm.decrypt(nonce, ciphertext, None)
+    return plaintext
+
+### Get unscrambled name 
+
+def extract_filename_header(plaintext:bytes):
+    if not plaintext.startswith(HEADER_MAGIC):
+        return None, plaintext
+        
+    idx = len(HEADER_MAGIC)
     
+    name_len = int.from_bytes(plaintext[idx:idx+2], "big")
+    idx +=2
+    
+    filename = plaintext[idx:idx+name_len].decode("utf-8")
+    idx += name_len
+    
+    remaining = plaintext[idx:]
+    
+    return filename, remaining
