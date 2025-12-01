@@ -53,10 +53,8 @@ def extract_filename_header(plaintext:bytes):
     
     return filename, remaining
 
-def get_output_filename(
-    output_path: str,
-    restored_name: str | None
-) -> pathlib.Path:
+def get_output_filename(output_path: str, restored_name: str | None) -> pathlib.Path:
+    
     out_path = pathlib.Path(output_path)
 
     if restored_name is None:
