@@ -52,3 +52,18 @@ def extract_filename_header(plaintext:bytes):
     remaining = plaintext[idx:]
     
     return filename, remaining
+
+def get_output_filename(
+    output_path: str,
+    restored_name: str | None
+) -> pathlib.Path:
+    out_path = pathlib.Path(output_path)
+
+    if restored_name is None:
+        return out_path
+
+    if out_path.is_dir() or output_path.endswitch(("/","\\")):
+        return out_path / restored_name
+
+    return out_path.parent / restored_name
+
